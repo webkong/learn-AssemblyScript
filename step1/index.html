@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- <script type="module">
+import { add } from "./build/release.js";
+document.body.innerText = add(1, 2);
+</script> -->
+  <script type="module">
+    const importObject = {
+      env: {
+        alert(messagePtr) {
+          console.log("🚀 ~ file: index.html:13 ~ alert ~ messagePtr:", messagePtr)
+          window.alert(messagePtr);
+        },
+        notice(str) {
+          window.alert(str)
+        },
+        abort: function (message, fileName, lineNumber, columnNumber) {
+          console.error(`WebAssembly abort: ${message} at ${fileName}:${lineNumber}:${columnNumber}`);
+        },
+      }
+    };
+    WebAssembly.instantiateStreaming(fetch("build/debug.wasm"), importObject)
+      .then(obj => {
+        console.log("🚀 ~ file: index.html:19 ~ obj:", obj)
+        const { showAlert } = obj.instance.exports;
+        showAlert('123');
+      })
+      .catch(console.error);
+  </script>
+</head>
+
+<body></body>
+
+</html>
